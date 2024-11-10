@@ -1,14 +1,3 @@
-###########################################################################
-#       DEVST: Dataset of Electric Vehicle Synthetic Trips                #
-#              IÃ±aki Cejudo    Eider Irigoyen    Iker Arandia             #
-#                   Itziar Urbieta     Harbil Arregui                     #
-#                               EstÃ­Â­baliz Loyo                            #
-#                                                                         #
-#                           Vicomtech Foundation                          #
-#                Basque Research and Technology Alliance (BRTA)           #
-#                             www.vicomtech.org                           #
-###########################################################################
-
 Title
 =====
 
