@@ -1,0 +1,11 @@
+pyspark
+pandas
+numpy
+scikit-learn
+mlflow
+tensorflow
+matplotlib
+tqdm
+pyarrow
+fastparquet
+ruff
