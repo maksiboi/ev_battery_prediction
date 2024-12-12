@@ -1,7 +1,3 @@
-Here is the `README.md` file tailored for the data science team, based on your project structure and the provided code:
-
----
-
 # Battery Monitoring and Prediction: Electric Vehicle Dataset
 
 ## Overview
