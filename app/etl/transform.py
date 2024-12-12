@@ -1,11 +1,5 @@
-from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.types import (
-    StructType,
-    StructField,
-    StringType,
-    FloatType,
-    IntegerType,
-)
+from pyspark.sql import DataFrame
+
 from pyspark.sql import functions as F
 
 
@@ -28,6 +22,7 @@ def transform(df: DataFrame) -> DataFrame:
         .withColumnRenamed("completedDistance(km)", "completed_distance")
         .withColumnRenamed("mWh", "consumption_average_m_per_wh")
         .withColumnRenamed("remainingRange(km)", "remaining_range")
+        .withColumnRenamed("trafficFactor", "traffic_factor")
     )
 
     # Convert the speed from m/s to km/h
