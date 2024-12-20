@@ -19,13 +19,13 @@ class BatteryMonitoringCampaigns:
         # Save the train and test DataFrames as Parquet files
         train_df.write.parquet(f"data/output_data/{campaign_name}/train_data.parquet", mode="overwrite")
         test_df.write.parquet(f"data/output_data/{campaign_name}/test_data.parquet", mode="overwrite")
-
-        print(f"Data has been saved as Parquet files for {campaign_name} campaign.")
-
+        
     def left_range_campaign(self) -> None:
         """ Prediction of remaining battery range (regression) """
         model_df = self.df.select(
             constants.DataFrameColumns.VEHICLE_ID.col,
+            constants.DataFrameColumns.TRIP_PLAN.col,
+            constants.DataFrameColumns.SIMULATION_STEP.col,
             constants.DataFrameColumns.ACCELERATION.col,
             constants.DataFrameColumns.ACTUAL_BATTERY_CAPACITY_WH.col,
             constants.DataFrameColumns.STATE_OF_CHARGE.col,
@@ -45,6 +45,8 @@ class BatteryMonitoringCampaigns:
         """ Prediction of energy consumption, i.e., the average energy consumption (mWh) """
         model_df = self.df.select(
             constants.DataFrameColumns.VEHICLE_ID.col,
+            constants.DataFrameColumns.TRIP_PLAN.col,
+            constants.DataFrameColumns.SIMULATION_STEP.col,
             constants.DataFrameColumns.SPEED.col,
             constants.DataFrameColumns.ACCELERATION.col,
             constants.DataFrameColumns.ROAD_SLOPE.col,
@@ -61,6 +63,8 @@ class BatteryMonitoringCampaigns:
         """ Battery range classification (classification) """
         model_df = self.df.select(
             constants.DataFrameColumns.VEHICLE_ID.col,
+            constants.DataFrameColumns.TRIP_PLAN.col,
+            constants.DataFrameColumns.SIMULATION_STEP.col,
             constants.DataFrameColumns.STATE_OF_CHARGE.col,
             constants.DataFrameColumns.SPEED.col,
             constants.DataFrameColumns.ACCELERATION.col,
