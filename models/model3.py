@@ -33,3 +33,5 @@ if train_data is not None and test_data is not None:
 
     print("Točnost modela:", accuracy_score(y_test, y_pred))
     print("Izvještaj o klasifikaciji:\n", classification_report(y_test, y_pred))
+    overlap = pd.merge(train_data, test_data, how='inner', on=features)
+

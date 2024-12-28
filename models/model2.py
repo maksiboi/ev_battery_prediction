@@ -3,11 +3,11 @@ import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from load_data import load_data_campaign1, load_data_campaign2, load_data_campaign3
+import seaborn as sns
 
-# Odabir kampanje
 kampanja = "campaign2" 
 
-# Učitavanje podataka na temelju kampanje
+# Učitavanje podataka 
 if kampanja == "campaign1":
     train_data, test_data = load_data_campaign1()
 elif kampanja == "campaign2":
@@ -38,7 +38,7 @@ rf_model.fit(X_train, y_train)
 rf_train_pred = rf_model.predict(X_train)
 rf_test_pred = rf_model.predict(X_test)
 
-# Evaluacija za Random Forest
+# Rezultati za Random Forest
 rf_train_mse = mean_squared_error(y_train, rf_train_pred)
 rf_train_r2 = r2_score(y_train, rf_train_pred)
 rf_test_mse = mean_squared_error(y_test, rf_test_pred)
@@ -52,7 +52,7 @@ gb_model.fit(X_train, y_train)
 gb_train_pred = gb_model.predict(X_train)
 gb_test_pred = gb_model.predict(X_test)
 
-# Evaluacija za Gradient Boosting
+# Rezultati za Gradient Boosting
 gb_train_mse = mean_squared_error(y_train, gb_train_pred)
 gb_train_r2 = r2_score(y_train, gb_train_pred)
 gb_test_mse = mean_squared_error(y_test, gb_test_pred)
@@ -70,3 +70,22 @@ print(f"Train Mean Squared Error: {gb_train_mse:.2f}")
 print(f"Train R-squared: {gb_train_r2:.2f}")
 print(f"Test Mean Squared Error: {gb_test_mse:.2f}")
 print(f"Test R-squared: {gb_test_r2:.2f}")
+
+# Histogram predikcija vs stvarnih vrijednosti
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+sns.histplot(rf_test_pred, kde=True, color='blue', label="Predikcija (RF)", stat="density")
+sns.histplot(y_test, kde=True, color='red', label="Stvarne vrijednosti", stat="density")
+plt.title('Distribucija: Predikcija vs Stvarne vrijednosti (Random Forest)')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+sns.histplot(gb_test_pred, kde=True, color='blue', label="Predikcija (GB)", stat="density")
+sns.histplot(y_test, kde=True, color='red', label="Stvarne vrijednosti", stat="density")
+plt.title('Distribucija: Predikcija vs Stvarne vrijednosti (Gradient Boosting)')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
