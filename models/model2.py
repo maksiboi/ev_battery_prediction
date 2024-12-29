@@ -4,31 +4,43 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from load_data import load_data_campaign1, load_data_campaign2, load_data_campaign3
 import seaborn as sns
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 
-kampanja = "campaign2" 
+kampanja = "campaign2"
 
 # Učitavanje podataka 
+kampanja = "campaign1"
 if kampanja == "campaign1":
     train_data, test_data = load_data_campaign1()
 elif kampanja == "campaign2":
     train_data, test_data = load_data_campaign2()
-elif kampanja == "campaign3":
-    train_data, test_data = load_data_campaign3()
 else:
-    print("Greška: Nevažeća kampanja!")
-    exit()
+    train_data, test_data = load_data_campaign3()
 
-# Provjera postoji li podatak
-if train_data is None or test_data is None:
-    print("Greška pri učitavanju podataka!")
-    exit()
 
-# Odabir značajki 
-X_train = train_data[['speed', 'acceleration', 'wind', 'traffic_factor']]  
+# Prebacivanje svih tekstualnih podataka u numeričke (Label Encoding za 'vehicle_id')
+label_encoder = LabelEncoder()
+
+# Fitiranje LabelEncoder-a samo na trening podatke za 'vehicle_id'
+train_data['vehicle_id'] = label_encoder.fit_transform(train_data['vehicle_id'])
+
+# Provjera i transformacija test podataka za 'vehicle_id'
+train_vehicle_ids = set(train_data['vehicle_id'])
+test_vehicle_ids = set(test_data['vehicle_id'])
+
+# Dodavanje nepoznatih vrijednosti kao posebnu kategoriju za 'vehicle_id'
+label_encoder.classes_ = np.append(label_encoder.classes_, 'unknown')
+
+# Transformiraj testne podatke za 'vehicle_id'
+test_data['vehicle_id'] = label_encoder.transform(test_data['vehicle_id'].apply(lambda x: x if x in train_vehicle_ids else 'unknown'))
+
+# Odabir značajki koje ćemo koristiti za treniranje
+X_train = train_data[['speed', 'acceleration', 'road_slope', 'auxiliaries', 'traffic_factor', 'wind']]  
 y_train = train_data['total_energy_consumed_wh'] 
 
-X_test = test_data[['speed', 'acceleration', 'wind', 'traffic_factor']]  
-y_test = test_data['total_energy_consumed_wh'] 
+X_test = test_data[['speed', 'acceleration', 'road_slope', 'auxiliaries', 'traffic_factor', 'wind']]  
+y_test = test_data['total_energy_consumed_wh']
 
 # Treniranje Random Forest modela
 rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -59,7 +71,7 @@ gb_test_mse = mean_squared_error(y_test, gb_test_pred)
 gb_test_r2 = r2_score(y_test, gb_test_pred)
 
 # Ispis rezultata za oba modela
-print("Random Forest Regressor:")
+print("\nRandom Forest Regressor:")
 print(f"Train Mean Squared Error: {rf_train_mse:.2f}")
 print(f"Train R-squared: {rf_train_r2:.2f}")
 print(f"Test Mean Squared Error: {rf_test_mse:.2f}")
@@ -88,4 +100,3 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
-
