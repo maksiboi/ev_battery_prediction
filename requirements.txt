@@ -9,3 +9,5 @@ tqdm
 pyarrow
 fastparquet
 ruff
+plotly
+flask
