@@ -88,44 +88,47 @@ export class AppComponent {
   }
 
   setActiveTab(tab: string) {
-    this.activeTab = tab;
-    this.prediction = null;
-    this.error = null;
+    this.activeTab = tab
+    this.prediction = null
+    this.error = null
   }
 
   onSubmit() {
-    this.loading = true;
-    this.prediction = null;
-    this.error = null;
+    this.loading = true
+    this.prediction = null
+    this.error = null
 
-    let observable;
-    let formData;
+    let observable
+    let formData
+    let suffix = ""
 
     switch (this.activeTab) {
       case 'range':
-        formData = this.rangeForm.value;
-        observable = this.predictionService.predictRange(formData);
-        break;
+        formData = this.rangeForm.value
+        observable = this.predictionService.predictRange(formData)
+        suffix = " km"
+        break
       case 'consumption':
-        formData = this.consumptionForm.value;
-        observable = this.predictionService.predictConsumption(formData);
-        break;
+        formData = this.consumptionForm.value
+        observable = this.predictionService.predictConsumption(formData)
+        suffix = " kWh"
+        break
       case 'batteryRange':
-        formData = this.batteryRangeForm.value;
-        observable = this.predictionService.predictBatteryRange(formData);
-        break;
+        formData = this.batteryRangeForm.value
+        observable = this.predictionService.predictBatteryRange(formData)
+        break
       default:
-        return;
+        return
     }
 
     observable.subscribe({
       next: (response: Prediction) => {
-        this.prediction = response.prediction;
-        this.loading = false;
+        this.prediction = response.prediction + suffix
+        this.loading = false
       },
       error: (error) => {
-        this.error = error.message || error.details || "Unknown error occurred.";
-        this.loading = false;
+        this.error = error.message || error.details || "Unknown error occurred."
+        this.loading = false
       }
     });
   }
