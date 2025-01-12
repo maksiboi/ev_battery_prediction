@@ -1,0 +1,170 @@
+<div class="container">
+  <h1>EV Prediction Models</h1>
+
+  <div class="tabs">
+    <button
+      [class.active]="activeTab === 'range'"
+      (click)="setActiveTab('range')">
+      Range Prediction
+    </button>
+    <button
+      [class.active]="activeTab === 'consumption'"
+      (click)="setActiveTab('consumption')">
+      Energy Consumption
+    </button>
+    <button
+      [class.active]="activeTab === 'batteryRange'"
+      (click)="setActiveTab('batteryRange')">
+      Battery Range Classification
+    </button>
+  </div>
+
+  <div class="tab-content" [ngSwitch]="activeTab">
+    <form *ngSwitchCase="'range'" [formGroup]="rangeForm" (ngSubmit)="onSubmit()" class="prediction-form">
+      <h2>Range Prediction</h2>
+      <div class="form-group">
+        <label>Vehicle ID</label>
+        <select formControlName="vehicle_id">
+          <option value="" disabled selected>Select a vehicle</option>
+          <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">
+            {{vehicle.id}}: {{vehicle.description}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Acceleration (m/s²):</label>
+        <input type="number" formControlName="acceleration" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Actual Battery Capacity (Wh):</label>
+        <input type="number" formControlName="actual_battery_capacity_wh">
+      </div>
+      <div class="form-group">
+        <label>State of Charge (%):</label>
+        <input type="number" formControlName="state_of_charge" min="0" max="100">
+      </div>
+      <div class="form-group">
+        <label>Speed (km/h):</label>
+        <input type="number" formControlName="speed">
+      </div>
+      <div class="form-group">
+        <label>Total Energy Consumed (Wh):</label>
+        <input type="number" formControlName="total_energy_consumed_wh">
+      </div>
+      <div class="form-group">
+        <label>Total Energy Regenerated (Wh):</label>
+        <input type="number" formControlName="total_energy_regenerated_wh">
+      </div>
+      <div class="form-group">
+        <label>Completed Distance (km):</label>
+        <input type="number" formControlName="completed_distance" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Traffic Factor:</label>
+        <input type="number" formControlName="traffic_factor" min="0" max="1" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Wind Speed (m/s):</label>
+        <input type="number" formControlName="wind" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Remaining Range (km):</label>
+        <input type="number" formControlName="remaining_range" step="0.1">
+      </div>
+      <button type="submit" [disabled]="!rangeForm.valid || loading">
+        Predict Range
+      </button>
+    </form>
+
+    <form *ngSwitchCase="'consumption'" [formGroup]="consumptionForm" (ngSubmit)="onSubmit()" class="prediction-form">
+      <h2>Energy Consumption Prediction</h2>
+      <div class="form-group">
+        <label>Speed (km/h):</label>
+        <input type="number" formControlName="speed">
+      </div>
+      <div class="form-group">
+        <label>Acceleration (m/s²):</label>
+        <input type="number" formControlName="acceleration" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Road Slope (degrees):</label>
+        <input type="number" formControlName="road_slope" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Auxiliaries Power (W):</label>
+        <input type="number" formControlName="auxiliaries">
+      </div>
+      <div class="form-group">
+        <label>Traffic Factor:</label>
+        <input type="number" formControlName="traffic_factor" min="0" max="1" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Wind Speed (m/s):</label>
+        <input type="number" formControlName="wind" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Total Energy Consumed (Wh):</label>
+        <input type="number" formControlName="total_energy_consumed_wh">
+      </div>
+      <button type="submit" [disabled]="!consumptionForm.valid || loading">
+        Predict Consumption
+      </button>
+    </form>
+
+    <form *ngSwitchCase="'batteryRange'" [formGroup]="batteryRangeForm" (ngSubmit)="onSubmit()" class="prediction-form">
+      <h2>Battery Range Classification</h2>
+      <div class="form-group">
+        <label>Speed (km/h):</label>
+        <input type="number" formControlName="speed">
+      </div>
+      <div class="form-group">
+        <label>Acceleration (m/s²):</label>
+        <input type="number" formControlName="acceleration" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Completed Distance (km):</label>
+        <input type="number" formControlName="completed_distance" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Altitude (m):</label>
+        <input type="number" formControlName="alt">
+      </div>
+      <div class="form-group">
+        <label>Road Slope (degrees):</label>
+        <input type="number" formControlName="road_slope" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Wind Speed (m/s):</label>
+        <input type="number" formControlName="wind" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Traffic Factor:</label>
+        <input type="number" formControlName="traffic_factor" min="0" max="1" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Occupancy:</label>
+        <input type="number" formControlName="occupancy" min="1">
+      </div>
+      <div class="form-group">
+        <label>Auxiliaries Power (W):</label>
+        <input type="number" formControlName="auxiliaries">
+      </div>
+      <div class="form-group">
+        <label>Remaining Range (km):</label>
+        <input type="number" formControlName="remaining_range" step="0.1">
+      </div>
+      <button type="submit" [disabled]="!batteryRangeForm.valid || loading">
+        Classify Range
+      </button>
+    </form>
+  </div>
+
+  <div class="prediction-result" *ngIf="prediction">
+    <h3>Prediction Result:</h3>
+    <pre>{{ prediction }}</pre>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+</div>

@@ -20,6 +20,11 @@ This repository contains a Flask-based API that allows for predicting the remain
 - **`start_backend.sh`**: Shell script to start the Flask application.
 
 ## Start APP
+
+Before starting the app, you need to get the models on your local machine. Once you do,
+in `routes.py` modify `RANGE_MODEL_PATH`, `CONSUMPTION_MODEL_PATH` and `BATTERY_MODEL_PATH`
+to point to the models. After that you can start the app with the shell script:
+
 ```bash
 cd backend
 chmod +x start_backend.sh
